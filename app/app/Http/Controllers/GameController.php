@@ -4,6 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\User;
+
+use  Illuminate\Support\Facades\Auth;
+
+use App\Game;
+
+use Carbon\Carbon;
+
 class GameController extends Controller
 {
     /**
@@ -13,7 +21,6 @@ class GameController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -21,20 +28,29 @@ class GameController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        return view('games.status', ['request' => $request]);
     }
 
     /**
      * Store a newly created resource in storage.
-     *
+     *対戦申込み
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $games = new Game;
+        $games->game_id = $request->id;
+        $games->user_id = Auth::id();
+        $games->body = $request->body;
+        $games->email = Auth::user()->email;
+        $games->date = Carbon::now();
+
+        $games->save();
+
+        return redirect('/teams');
     }
 
     /**
@@ -45,7 +61,6 @@ class GameController extends Controller
      */
     public function show($id)
     {
-        //
     }
 
     /**
@@ -68,7 +83,11 @@ class GameController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $games = Game::where('user_id', $id)->first();
+        $games->status = 1;
+        $games->save();
+
+        return redirect('/profile?flg=1');
     }
 
     /**

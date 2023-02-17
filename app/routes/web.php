@@ -16,4 +16,6 @@ Route::resource('teams', 'TeamController');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/profile', 'TeamController@profile')->name('teams.profile');
+
+//マイページ

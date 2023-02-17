@@ -8,34 +8,30 @@
               エリアを指定する
             </button>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">北海道</a>
-              <a class="dropdown-item" href="#">東北</a>
-              <a class="dropdown-item" href="#">関東</a>
-              <a class="dropdown-item" href="#">近畿</a>
-              <a class="dropdown-item" href="#">関西</a>
-              <a class="dropdown-item" href="#">中国</a>
-              <a class="dropdown-item" href="#">四国</a>
-              <a class="dropdown-item" href="#">九州</a>
-              <a class="dropdown-item" href="#">沖縄</a>
+            @foreach(\Area::LIST as $key => $item)
+              <a class="dropdown-item" href="/teams?keyword={{$key}}">{{$item}}</a>
+            @endforeach
             </div>
         </div>
   </div>
     <div class="row justify-content-center">
-      <div class="col-md-8">
+      <div class="col-md-8">   
+        @foreach($users as $user)
         <div class="card" style="width: 45rem;">
-          <div class="card-body d-flex">
+          <div class="card-body d-flex">       
             <div class="col">
-            <h5 class="card-title">team</h5>
-            <h6 class="card-subtitle mb-2 text-muted">area</h6>
-            <h7 class="card-subtitle mb-2 text-muted">memmber</h7>
-            <p class="card-text">チームの紹介文がここに来ます。</p>
-            <a href="{{route('teams.show',1)}}" class="card-link">詳細</a>
+            <h5 class="card-title">{{$user['name']}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{\Area::LIST[$user['area']]}}</h6>
+            <h7 class="card-subtitle mb-2 text-muted">{{\Team::LIST[$user['team']]}}</h7>
+            <p class="card-text">{{$user['body']}}</p>
+            <a href="{{route('teams.show', $user['id']) }}" class="card-link">詳細</a>
             <button type="button" class="btn btn-info ml-3 text-white">いいね</button>
           </div>
           <div class="col">
-            <img src="" class="card-img-top rounded-circle" alt="...">
+            <img src="{{ asset('storage/'.$user['image']) }}" class="card-img-top rounded-circle" alt="...">
           </div>
         </div>
+        @endforeach
       </div>
     </div>
 </div>

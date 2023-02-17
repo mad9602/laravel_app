@@ -3,34 +3,113 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="dropdown">
-            <button type="button" class="btn btn-secondary dropdown-toggle mb-5 p-2 mb-1 bg-info text-white" data-toggle="dropdown" aria-expanded="false">
-              エリアを指定する
-            </button>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">北海道</a>
-              <a class="dropdown-item" href="#">東北</a>
-              <a class="dropdown-item" href="#">関東</a>
-              <a class="dropdown-item" href="#">近畿</a>
-              <a class="dropdown-item" href="#">関西</a>
-              <a class="dropdown-item" href="#">中国</a>
-              <a class="dropdown-item" href="#">四国</a>
-              <a class="dropdown-item" href="#">九州</a>
-              <a class="dropdown-item" href="#">沖縄</a>
+        <div class="col-md-8">
+            @if($flg == "")
+            <div class="card" style="width: 45rem;">
+                <div style="margin-top: 30px;">
+
+
+                    <img src="{{ asset('storage/'.Auth::user()->image) }}" class="rounded mx-auto d-block profile-img" alt="...">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>氏名</th>
+                            <td>{{ Auth::user()->name }}</td>
+                        </tr>
+                        <tr>
+                            <th>メールアドレス</th>
+                            <td>{{ Auth::user()->email }}</td>
+                        </tr>
+                        <tr>
+                            <th>エリア</th>
+                            <td>{{\Area::LIST[Auth::user()->area]}}</td>
+                        </tr>
+                        <tr>
+                            <th>チームの人数</th>
+                            @if(Auth::user()->team == 0)
+                            <td>{{"1〜10人"}}</td>
+                            @elseif(Auth::user()->team == 1)
+                            <td>{{"11〜30人"}}</td>
+                            @else(Auth::user()->team == 2)
+                            <td>{{"31人以上"}}</td>
+                            @endif
+                        </tr>
+                        <tr>
+                            <th>紹介文</th>
+                            <td>{{Auth::user()->body}}</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
+
+
+            @elseif($flg == 1)
+            <div class='card'>
+                <div>
+                    <ul class='row'>
+                        @if(is_array($matchingList))
+                        @foreach($matchingList as $value)
+                        <li>{{$value['name']}}</li>
+                        @endforeach
+                        @else
+                        <li>まだマッチングはありません。</li>
+                        @endif
+                    </ul>
+                </div>
+            </div>
+
+            @elseif($flg == 2)
+            <div class='card'>
+                <div>
+                    <ul class='row'>
+                        @if(is_array($likeList))
+                        @foreach($likeList as $value)
+                        <li>{{$value['name']}}</li>
+                        @endforeach
+                        @else
+                        <li>いいねしたチームはありません。</li>
+                        @endif
+                    </ul>
+                </div>
+            </div>
+
+            @elseif($flg == 3)
+            <div class='card'>
+                <div>
+                    <ul class='row'>
+                        @if(is_array($applyList))
+                        @foreach($applyList as $value)
+                        <li>{{$value['name']}}</li>
+                        @endforeach
+                        @else
+                        <li>まだ申し込んでいません。</li>
+                        @endif
+                    </ul>
+                </div>
+            </div>
+            @elseif($flg == 4)
+            <div class='card'>
+                <div>
+                    <ul class='row'>
+                        @if(is_array($appliedList))
+                        @foreach($appliedList as $value)
+                        <li>{{$value['name']}}</li>
+                        <li>
+                            <form action="{{ route('games.update',$value['id']) }}" method="POST">
+                                @method('PUT')
+                                @csrf
+                                <button type='submit' class='btn btn-outline-danger'>承認</button>
+                            </form>
+                        </li>
+                        @endforeach
+                        @else
+                        <li>まだ申し込まれていません。</li>
+                        @endif
+                    </ul>
+                </div>
+            </div>
+
+            @endif
         </div>
-        <div class="card" style="width: 45rem;">
-          <div class="card-body">
-            <h5 class="card-title">team</h5>
-            <h6 class="card-subtitle mb-2 text-muted">area</h6>
-            <h7 class="card-subtitle mb-2 text-muted">memmber</h7>
-            <p class="card-text">チームの紹介文がここに来ます。</p>
-            <a href="{{route('teams.show',1)}}" class="card-link">詳細</a>
-            <button type="button" class="btn btn-info ml-3 text-white">いいね</button>
-          </div>
-        </div>
-      </div>
     </div>
 </div>
 @endsection

@@ -53,9 +53,13 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'team' => ['not_in:not'],
+            'area' => ['not_in:not'],
+            'body' => ['required','string',],
+            'image' => ['required','image'],
         ]);
     }
-
+    
     /**
      * Create a new user instance after a valid registration.
      *
@@ -64,10 +68,17 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $image =request()->file( 'image')->getClientOriginalName();
+        request()->file( 'image')->storeAs('', $image,'public');
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'team' => $data['team'],
+            'area' => $data['area'],
+            'body' => $data['body'],
+            'image' => $image
         ]);
     }
 }
