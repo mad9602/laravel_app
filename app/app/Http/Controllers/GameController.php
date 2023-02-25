@@ -9,7 +9,8 @@ use App\User;
 use  Illuminate\Support\Facades\Auth;
 
 use App\Game;
-
+use App\Opponents;
+use App\DelCount;
 use Carbon\Carbon;
 
 class GameController extends Controller
@@ -19,8 +20,11 @@ class GameController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $query = DelCount::orderBy('user_id', 'asc')->select('user_id')->groupBy('user_id')->get();
+
+        return view('user.index_host')->with(['query' => $query]);
     }
 
     /**
@@ -41,13 +45,15 @@ class GameController extends Controller
      */
     public function store(Request $request)
     {
-        $games = new Game;
-        $games->game_id = $request->id;
-        $games->user_id = Auth::id();
-        $games->body = $request->body;
-        $games->email = Auth::user()->email;
-        $games->date = Carbon::now();
+        $opponents = new Opponents;
+        $opponents->charange_text = $request->body;
+        $opponents->user_id = $request->id;
+        $opponents->save();
 
+        $games = new Game;
+        $games->opponents_id = $opponents->id;
+        $games->user_id = Auth::id();
+        $games->date = Carbon::now();
         $games->save();
 
         return redirect('/teams');
@@ -61,6 +67,10 @@ class GameController extends Controller
      */
     public function show($id)
     {
+        $user = User::find($id);
+
+
+        return view('user.acount')->with(['user' => $user]);
     }
 
     /**
@@ -69,9 +79,8 @@ class GameController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit()
     {
-        //
     }
 
     /**
@@ -83,11 +92,18 @@ class GameController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $games = Game::where('user_id', $id)->first();
-        $games->status = 1;
-        $games->save();
-
-        return redirect('/profile?flg=1');
+        if ($request->has('accept')) {
+            $games = Game::find($id);
+            $games->status = 1;
+            $games->save();
+            return redirect('/profile?flg=1');
+        }
+        if ($request->has('refuse')) {
+            $games = Game::find($id);
+            $games->status = 2;
+            $games->save();
+            return redirect('/teams');
+        }
     }
 
     /**
@@ -98,6 +114,13 @@ class GameController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // $user = User::find($id);
+        // $delcount = DelCount::where('user_id', $id);
+
+        // $user->delete();
+
+        // $delcount->delete();
+
+        return redirect()->route('teams.index');
     }
 }

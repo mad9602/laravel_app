@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Game;
+use App\Opponents;
 
 class User extends Authenticatable
 {
@@ -16,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','team','area','body','image'
+        'name', 'email', 'password', 'team', 'area', 'body', 'image'
     ];
 
     /**
@@ -36,4 +38,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function game()
+    {
+        $this->hasMany(Game::class);
+    }
+
+    public function opponents()
+    {
+        $this->hasMany(Opponents::class);
+    }
+
+    public function like()
+    {
+        return $this->hasMany('App\Like');
+    }
+
+    public function delcount()
+    {
+        return $this->hasMany('App\DelCount', 'user_id', 'id');
+    }
 }

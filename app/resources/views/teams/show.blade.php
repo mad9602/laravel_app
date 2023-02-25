@@ -4,6 +4,11 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            <div class="card mx-auto h5 " style="width: 18rem;">
+                <div class="card-body text-center">
+                    チーム詳細
+                </div>
+            </div>
             <div class="card">
                 <div class='row justify-content-center align-items-center p-5'>
                     <img src="{{ asset('storage/'.$user['image']) }}" class="rounded-circle col-md-6" alt=" ...">
@@ -20,9 +25,9 @@
                 </div>
                 <div class="card-body">
                     <a href="/games/create?id={{$user['id']}}" class='btn btn-outline-success'>試合を申し込む</a>
-                    <button type="button" class="btn btn-info ml-3 text-white">いいね</button>
                 </div>
             </div>
+            <a href="/teams/create?id={{$user['id']}}" class="btn btn-danger mt-1">報告</a>
         </div>
     </div>
 </div>

@@ -8,7 +8,11 @@ use App\User;
 
 use App\Game;
 
+use App\Opponents;
+
 use App\Like;
+
+use App\DelCount;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -22,22 +26,37 @@ class TeamController extends Controller
      */
     public function index(Request $request)
     {
+        // Like::select('like_id')->where('user_id', Auth::id())->get();
+        // $like = Like::select('like_id')->where('user_id', Auth::id())->get();
+        $like = new Like;
         $query = User::where('id', '!=', Auth::id());
-        if ($request->keyword != "") {
-            $query->where('area', $request->keyword);
+        $area = $request->area;
+        $team = $request->team;
+        if ($area != '') {
+            $query->where('area', 'like', "%{$area}%");
+            // dd($query->get());
+        }
+        if ($team != '') {
+            $query->where(function ($q) use ($team) {
+                $q->orWhere('team', 'like', "%{$team}%");
+            });
         }
         $users = $query->get();
-
-        return view('teams.index')->with(['users' => $users]);
+        $user = Auth::user();
+        if ($user->role === 0 && isset($user->role)) {
+            return redirect('/games');
+        } else {
+            return view('teams.index')->with(['users' => $users, 'like' => $like]);
+        }
     }
 
     public function profile(Request $request)
     {
-        $user = User::query();
-        $applyList = $this->applyList($user);
-        $appliedList = $this->appliedList($user);
-        $matchingList = $this->matchingList($user);
-        $likeList = $this->likeList($user);
+        $applyList = $this->applyList();
+        $appliedList = $this->appliedList();
+        $matchingList = $this->matchingList();
+        $likeList = $this->likeList();
+
 
         return view('teams.profile')->with([
             'applyList' => $applyList,
@@ -55,8 +74,11 @@ class TeamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        $user = User::find($request->id);
+
+        return view('user.del_count', ['user' => $user]);
     }
 
     /**
@@ -67,7 +89,12 @@ class TeamController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $del_count = new DelCount;
+        $del_count->report = $request->report;
+        $del_count->user_id = $request->id;
+        $del_count->save();
+
+        return redirect('/teams');
     }
 
     /**
@@ -89,9 +116,9 @@ class TeamController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit()
     {
-        //
+        return view('teams.edit');
     }
 
     /**
@@ -103,7 +130,21 @@ class TeamController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find($id);
+        $image = $request->input('image');
+        if ($image) {
+            $image = request()->file('image')->getClientOriginalName();
+            request()->file('image')->storeAs('', $image, 'public');
+            $user->image = $image;
+        }
+        $user->name = $request->name;
+        $user->team = $request->team;
+        $user->area = $request->area;
+        $user->body = $request->body;
+
+        $user->save();
+
+        return redirect('/profile');
     }
 
     /**
@@ -118,76 +159,37 @@ class TeamController extends Controller
     }
 
     /**
-     * 申し込んだ相手
+     * 申し込んだ相手 status=0
      */
-    public function applyList($applyUser)
+    public function applyList()
     {
-        $applykey = Game::where('status', 0)->where('user_id', Auth::id())->get()->toArray();
-        if ($applykey) {
-            foreach ($applykey as $key) {
-                $applyUser->orWhere('id', $key['game_id']);
-            }
-            $applyUser = $applyUser->get()->toArray();
-        } else {
-            $applyUser = "";
-        }
-        return $applyUser;
+        return Game::where('status', 0)->where('user_id', Auth::id())->get();
     }
 
     /**
-     * 申し込まれた相手
+     * 申し込まれた相手 status=0
+     * マッチングリスト status=1
      */
-    public function appliedList($appliedUser)
+    public function appliedList()
     {
-        $appliedkeys = Game::where('status', 0)->where('game_id', Auth::id())->get()->toArray();
-        if ($appliedkeys) {
-            foreach ($appliedkeys as $key) {
-                $appliedUser->orWhere('id', $key['user_id']);
-            }
-            $appliedUser = $appliedUser->get()->toArray();
-        } else {
-            $appliedUser = "";
-        }
-        return $appliedUser;
+        return Opponents::where('user_id', Auth::id())->whereHas('game', function ($q) {
+            $q->where('status', 0);
+        })->get();
     }
 
-    /**
-     * マッチングリスト
-     */
-    public function matchingList($user)
+    public function matchingList()
     {
-        $keys = Game::where('status', 1)->where(function ($query) {
-            $query->where('game_id', Auth::id())
-                ->orWhere('user_id', Auth::id());
-        })->get()->toArray();
-        if ($keys) {
-            foreach ($keys as $key) {
-                $user->where('id', '!=', Auth::id())->where(function ($query) use ($key) {
-                    $query->where('id', $key['user_id'])->orWhere('id', $key['game_id']);
-                });
-            }
-            $user = $user->get()->toArray();
-        } else {
-            $user = "";
-        }
-        return $user;
+        return Opponents::where('user_id', Auth::id())->whereHas('game', function ($q) {
+            $q->where('status', 1);
+        })->get();
     }
-
 
     /**
      * いいねリスト
      */
-    public function likeList($user)
+    public function likeList()
     {
-        $keys = Like::where('user_id', Auth::id())->get()->toArray();
-        if ($keys) {
-            foreach ($keys as $key) {
-                $user->orWhere('id', $key['like_id']);
-            }
-            $user = $user->get()->toArray();
-        } else {
-            $user = "";
-        }
-        return $user;
+
+        return Like::where('user_id', Auth::id())->get();
     }
 }

@@ -77,7 +77,7 @@
                         <div class="form-group row">
                             <label for="team" class="col-md-4 col-form-label text-md-right mb-3 ">チーム人数 </label>
                                 <select class="custom-select col-md-6 ml-3 @error('team') is-invalid @enderror" name="team">
-                                    <option value="not" selected>Open this select menu</option>
+                                    <selected>Open this select menu</option>
                                     <option value="1">1~10人</option>
                                     <option value="2">11~30人</option>
                                     <option value="3">31人以上</option>
@@ -93,7 +93,7 @@
                         <div class="form-group row">
                             <label for="team" class="col-md-4 col-form-label text-md-right mb-3 ">地域 </label>
                                 <select class="custom-select col-md-6 ml-3 @error('area') is-invalid @enderror" name="area" >
-                                    <option value="not" selected>Open this select menu</option>
+                                    <selected>Open this select menu</option>
                                     <option value="1">北海道</option>
                                     <option value="2">東北</option>
                                     <option value="3">関東</option>

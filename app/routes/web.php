@@ -10,12 +10,14 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::resource('games', 'GameController');
-Route::resource('teams', 'TeamController');
-
 Auth::routes();
 
-Route::get('/profile', 'TeamController@profile')->name('teams.profile');
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('games', 'GameController', ['except' => ['destroy']]);
+    Route::resource('teams', 'TeamController');
+    Route::post('/like', 'LikeController@like');
+    Route::post('/delete/{id}/user', 'DeleteController@user_delete')->name('user.delete');
 
+    Route::get('/profile', 'TeamController@profile')->name('teams.profile');
+});
 //マイページ

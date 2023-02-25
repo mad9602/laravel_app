@@ -44,6 +44,6 @@ class LoginController extends Controller
 
     {
 
-        return redirect(route('teams.index'));
+        return redirect('/teams');
     }
 }
