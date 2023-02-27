@@ -77,6 +77,8 @@
                         <li class='mr-5 list-unstyled'>{{\Team::LIST[$value->game->user->team]}}</li>
                         <h3 class='mt-3'>エリア：</h3>
                         <li class='mr-3 list-unstyled'>{{\Area::LIST[$value->game->user->area]}}</li>
+                        <h3 class='mt-3'>メールアドレス：</h3>
+                        <li class='mr-3 list-unstyled'><a href="mailto:{{$value->game->user->email}}">{{$value->game->user->email}}</a></li>
                         <h3 class='mt-3'>メッセージ：</h3>
                         <li class='mr-3 list-unstyled'>{{$value->charange_text}}</li>
                     </ul>
@@ -109,8 +111,13 @@
                         <div class="row float-right profile-img mr-1">
                             <img src="{{ asset('storage/'.$liker->user->image) }}" class="card-img-top rounded-circle " alt="...">
                         </div>
-                        <h3 class='mt-3'>チーム名：</h3>
+                        <h3 class='mt-4'>チーム名：</h3>
                         <li class='mr-3 list-unstyled'>{{$liker->user->name}}</li>
+                        <h3 class='mt-4'>人数：</h3>
+                        <li class='mr-5 ml-3 list-unstyled'>{{\Team::LIST[$liker->user->team]}}</li>
+                        <h3 class='mt-4'>エリア：</h3>
+                        <li class='mr-3 list-unstyled'>{{\Area::LIST[$liker->user->area]}}</li>
+                        <li class="mt-5 list-unstyled"><a href="{{route('teams.show', $liker->user->id) }}" class="mt-5 list-unstyled">詳細</a></li>
                     </ul>
                 </div>
             </div>
@@ -186,7 +193,6 @@
                         <li class='mr-3 list-unstyled'>{{\Area::LIST[$opponents->game->user->area]}}</li>
                         <h3 class='mt-3'>メッセージ：</h3>
                         <li class='mr-3 list-unstyled'>{{$opponents->charange_text}}</li>
-                        <a href="{{route('teams.show', $user['id']) }}" class="card-link">詳細</a>
                         <li class='list-unstyled mt-3'>
                             <form action="{{ route('games.update',$opponents->game->id) }}" method="POST">
                                 @method('PUT')
