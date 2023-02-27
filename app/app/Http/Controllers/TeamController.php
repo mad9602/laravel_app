@@ -78,7 +78,7 @@ class TeamController extends Controller
     {
         $user = User::find($request->id);
 
-        return view('user.del_count', ['user' => $user]);
+        return view('host.del_count', ['user' => $user]);
     }
 
     /**
@@ -116,9 +116,11 @@ class TeamController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit()
+    public function edit($id)
     {
-        return view('teams.edit');
+        $user = User::find($id);
+
+        return view('teams.edit')->with(['user' => $user]);
     }
 
     /**
@@ -131,14 +133,15 @@ class TeamController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-        $image = $request->input('image');
+        $image = $request->file('image');
         if ($image) {
-            $image = request()->file('image')->getClientOriginalName();
+            $image = request()->file('image');
             request()->file('image')->storeAs('', $image, 'public');
             $user->image = $image;
         }
         $user->name = $request->name;
         $user->team = $request->team;
+        $user->email = $request->email;
         $user->area = $request->area;
         $user->body = $request->body;
 

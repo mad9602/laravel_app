@@ -148,6 +148,7 @@
                         <li class='mr-5 ml-3 list-unstyled'>{{\Area::LIST[$game->opponents->user->area]}}</li>
                         <h3 class='mt-3'>メッセージ：</h3>
                         <li class='mr-3 list-unstyled'>{{$game->opponents->charange_text}}</li>
+
                     </ul>
                 </div>
             </div>
@@ -185,6 +186,7 @@
                         <li class='mr-3 list-unstyled'>{{\Area::LIST[$opponents->game->user->area]}}</li>
                         <h3 class='mt-3'>メッセージ：</h3>
                         <li class='mr-3 list-unstyled'>{{$opponents->charange_text}}</li>
+                        <a href="{{route('teams.show', $user['id']) }}" class="card-link">詳細</a>
                         <li class='list-unstyled mt-3'>
                             <form action="{{ route('games.update',$opponents->game->id) }}" method="POST">
                                 @method('PUT')

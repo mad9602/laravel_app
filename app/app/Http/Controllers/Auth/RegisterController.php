@@ -55,11 +55,11 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'team' => ['not_in:not'],
             'area' => ['not_in:not'],
-            'body' => ['required','string',],
-            'image' => ['required','image'],
+            'body' => ['required', 'string',],
+            'image' => ['required', 'image'],
         ]);
     }
-    
+
     /**
      * Create a new user instance after a valid registration.
      *
@@ -68,8 +68,8 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $image =request()->file( 'image')->getClientOriginalName();
-        request()->file( 'image')->storeAs('', $image,'public');
+        $image = request()->file('image');
+        request()->file('image')->storeAs('', $image, 'public');
 
         return User::create([
             'name' => $data['name'],

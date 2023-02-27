@@ -24,7 +24,7 @@ class GameController extends Controller
     {
         $query = DelCount::orderBy('user_id', 'asc')->select('user_id')->groupBy('user_id')->get();
 
-        return view('user.index_host')->with(['query' => $query]);
+        return view('host.index_host')->with(['query' => $query]);
     }
 
     /**
