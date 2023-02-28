@@ -70,7 +70,7 @@ class GameController extends Controller
         $user = User::find($id);
 
 
-        return view('user.acount')->with(['user' => $user]);
+        return view('host.acount')->with(['user' => $user]);
     }
 
     /**
