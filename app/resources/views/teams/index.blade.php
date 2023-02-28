@@ -21,27 +21,26 @@
                 <option value="{{ $key }}">{{ $val }}</option>
                 @endforeach
             </select>
-            <button type="submit" class="btn btn-primary">選択</button>
+            <button type="submit" class="btn btn-outline-light">選択</button>
         </form>
     </div>
     <div class="row justify-content-center">
         <div class="col-md-8">
             @foreach($users as $user)
             @if($user['role'] ==1)
-            <div class="card" style="width: 45rem;">
+            <div class="card mb-3 bg-light" style="width: 45rem;">
                 <div class="card-body d-flex">
                     <div class="col">
-                        <h5 class="card-title">{{$user['name']}}</h5>
-                        <h7 class="card-subtitle mb-2 text-muted">{{\Team::LIST[$user['team']]}}</h7>
-                        <h6 class="card-subtitle mb-2 text-muted">{{\Area::LIST[$user['area']]}}</h6>
-                        <p class="card-text">{{$user['body']}}</p>
-                        <a href="{{route('teams.show', $user['id']) }}" class="card-link">詳細</a>
+                        <h5 class="card-title font-weight-bold h2">{{$user['name']}}</h5>
+                        <h7 class="card-subtitle mb-2 text-muted h5 m-4">{{\Team::LIST[$user['team']]}}</h7>
+                        <h6 class="card-subtitle mb-2 text-muted h5 m-4">{{\Area::LIST[$user['area']]}}</h6>
+                        <a href="{{route('teams.show', $user['id']) }}" class="card-link h4">詳細</a>
                         @if($like->exist(Auth::id(),$user->id))
-                        <a class="toggle_wish" like_id="{{ $user->id }}" like_product="0">
+                        <a class="toggle_wish ml-3" like_id="{{ $user->id }}" like_product="0">
                             <i style="font-size: 2rem; color: green;" class="bi bi-star-fill"></i>
                         </a>
                         @else
-                        <a class="toggle_wish" like_id="{{ $user->id }}" like_product="1">
+                        <a class="toggle_wish ml-3" like_id="{{ $user->id }}" like_product="1">
                             <i style="font-size: 2rem; color: green;" class="bi bi-star"></i>
                         </a>
                         @endif
@@ -50,9 +49,9 @@
                         <img src="{{ asset('storage/'.$user['image']) }}" class="card-img-top rounded-circle" alt="...">
                     </div>
                 </div>
-                @endif
-                @endforeach
             </div>
+            @endif
+            @endforeach
         </div>
     </div>
     @endsection

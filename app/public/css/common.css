@@ -1,16 +1,15 @@
-.profile-img{
+.profile-img {
     width: 300px;
     height: 300px;
     margin-bottom: 25px;
 }
 
-.head-icon{
+.head-icon {
     width: 50px;
     height: 50px;
-    border-radius:50%;
+    border-radius: 50%;
 }
 
-.list-icon{
+.list-icon {
     width: 70px;
 }
-

@@ -16,7 +16,7 @@
             </div>
 
 
-            <button type='submit'>報告する</button>
+            <button type='submit' class="btn btn-outline-light">報告する</button>
         </div>
     </form>
 

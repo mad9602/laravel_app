@@ -6,7 +6,7 @@
         <div class="col-md-8">
             @if($flg == "")
             <div class="card mx-auto h5 " style="width: 18rem;">
-                <div class="card-body text-center">
+                <div class="card-body text-center ">
                     マイページ
                 </div>
             </div>
@@ -43,7 +43,7 @@
                     </table>
                 </div>
                 <a href="{{ route('teams.edit', Auth::id()) }}">
-                    <button type='submit' class='btn btn-outline-secondary'>編集する</button>
+                    <button type='submit' class='btn btn-secondary btn-lg btn-block'>編集する</button>
                 </a>
             </div>
 
@@ -59,7 +59,7 @@
             <div class='card height: 20rem;'>
                 <div>
                     <ul>
-                        <li class='list-unstyled'>まだマッチングはありません。</li>
+                        <li class='list-unstyled h3 font-weight-bold m-3'>まだマッチングはありません。</li>
                     </ul>
                 </div>
             </div>
@@ -96,10 +96,10 @@
 
             @if(count($likeList) ==0 )
 
-            <div class='card'>
+            <div class='card h5'>
                 <div>
                     <ul>
-                        <li class='list-unstyled  list-unstyled h4'>いいねしたチームはありません。</li>
+                        <li class='list-unstyled  list-unstyled h3 font-weight-bold m-3'>いいねしたチームはありません。</li>
                     </ul>
                 </div>
             </div>
@@ -135,7 +135,7 @@
             <div class='card'>
                 <div>
                     <ul>
-                        <li class='list-unstyled h4'>まだ申し込んでいません。</li>
+                        <li class='list-unstyled h4 font-weight-bold m-3'>まだ申し込んでいません。</li>
                     </ul>
                 </div>
             </div>
@@ -143,16 +143,16 @@
             @foreach($applyList as $game)
             <div class='card'>
                 <div>
-                    <ul class='col h4'>
+                    <ul class='col h3 font-weight-bold'>
                         <div class="row float-right profile-img mr-1">
                             <img src="{{ asset('storage/' . $game->opponents->user->image) }}" class="card-img-top rounded-circle " alt="...">
                         </div>
                         <h3 class='mt-3'>チーム名：</h3>
                         <li class='mr-3 list-unstyled'>{{$game->opponents->user->name}}</li>
                         <h3 class='mt-3'>人数：</h3>
-                        <li class='mr-5 ml-3 list-unstyled'>{{\Team::LIST[$game->opponents->user->team]}}</li>
+                        <li class='mr-5  list-unstyled'>{{\Team::LIST[$game->opponents->user->team]}}</li>
                         <h3 class='mt-3'>エリア：</h3>
-                        <li class='mr-5 ml-3 list-unstyled'>{{\Area::LIST[$game->opponents->user->area]}}</li>
+                        <li class='mr-5  list-unstyled'>{{\Area::LIST[$game->opponents->user->area]}}</li>
                         <h3 class='mt-3'>メッセージ：</h3>
                         <li class='mr-3 list-unstyled'>{{$game->opponents->charange_text}}</li>
 
@@ -173,7 +173,7 @@
             <div class='card'>
                 <div>
                     <ul>
-                        <li class='list-unstyled h4'>まだ申し込まれていません。</li>
+                        <li class='list-unstyled h3 font-weight-bold m-3'>まだ申し込まれていません。</li>
                     </ul>
                 </div>
             </div>
@@ -181,14 +181,14 @@
             @foreach($appliedList as $opponents)
             <div class='card'>
                 <div>
-                    <ul class='col h4'>
+                    <ul class='col h3 font-weight-bold'>
                         <div class="row float-right profile-img mr-1">
                             <img src="{{ asset('storage/'.$opponents->game->user->image) }}" class="card-img-top rounded-circle " alt="...">
                         </div>
                         <h3 class='mt-3'>チーム名：</h3>
                         <li class='mr-3 list-unstyled'>{{$opponents->game->user->name}}</li>
                         <h3 class='mt-3'>人数：</h3>
-                        <li class='mr-5 ml-3 list-unstyled'>{{\Team::LIST[$opponents->game->user->team]}}</li>
+                        <li class='mr-5 list-unstyled'>{{\Team::LIST[$opponents->game->user->team]}}</li>
                         <h3 class='mt-3'>エリア：</h3>
                         <li class='mr-3 list-unstyled'>{{\Area::LIST[$opponents->game->user->area]}}</li>
                         <h3 class='mt-3'>メッセージ：</h3>
